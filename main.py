@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 import re
 import pandas as pd
 import pyodbc
@@ -433,3 +434,6 @@ async def not_order_past_nms(n_months: int, states: str | None = None):
         df2=pd.read_sql(sql=query2, con=conn2)
     
     return {"main_tb":df2[(~df2['outlet_guid'].isin(list(df['outlet_guid'].unique())))].reset_index(drop=True).to_dict(orient="records"), "Total Number of Outlets":df2['outlet_guid'].nunique()}
+
+if __name__ == "__main__":
+    uvicorn.run(app, port=8000)
